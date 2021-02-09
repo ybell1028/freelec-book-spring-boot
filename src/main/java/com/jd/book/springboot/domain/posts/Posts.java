@@ -26,7 +26,7 @@ import javax.persistence.*;
 public class Posts extends BaseTimeEntity {
     @Id // 해당 테이블의 PK(Primary Key) 필드를 다타냅니다
     //@GeneratedValue - PK의 생성규칙을 나타냅니다.
-    //@스프링부트 2.0에서는 GenerationType.IDENTITY 옵션을 추가해야만 auto_incremet가 됩니다.
+    //@스프링부트 2.0에서는 GenerationType.IDENTITY 옵션을 추가해야만 auto_increment가 됩니다.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //참고! - 웬만하면 Entity의 PK는 Long 타입의 Auto_increment로 둘 것
     private Long id;

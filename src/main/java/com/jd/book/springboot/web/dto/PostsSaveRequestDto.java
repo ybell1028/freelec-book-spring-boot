@@ -14,7 +14,7 @@ public class PostsSaveRequestDto {
     //화면 변경은 사소한 기능 변경인데 이를 위해 테이블과 연결된 Entity 클래스를 변경하는 것은 너무 큰 변경입니다.
 
     //수많은 서비스 클래스나 비즈니스 로직들이 Entity 클래스를 기준으로 동작하기 때문에
-    //변경되면 여러 클래스에 영향을 끼치지만, Request와 Response용 ㅇ새sms Ciew를 위한 클래스라
+    //변경되면 여러 클래스에 영향을 끼치지만, Request와 Response용 Dto는 View를 위한 클래스라
     //정말 자주 변경이 필요합니다.
 
     //또한 **Controller에서 결괏값으로 여러 테이블을 조인해서 줘야하는 경우가 빈번하므로**
