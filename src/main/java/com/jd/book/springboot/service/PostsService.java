@@ -66,18 +66,23 @@ public class PostsService {
     //(readOnly = true)를 주면 트랜잭션 범위는 유지하되, 조회 기능만 남겨두어 속도가 개선되기 때문에
     //등록, 수정, 삭제 기능이 전혀 없는 서비스 메소드에서 사용하는 것을 추천합니다.
     public List<PostsListResponseDto> findAllDesc(){
+        //람다식 설명
+        //.map(PostsListResponseDto::new)는 .map(posts -> new PostsListResponseDto(posts))와 같습니다
+        //postRepository 결과로 넘어온 Posts의 Stream을 map을 통해 PostsListResponseDto 변환 -> List로 반환하는 메소드입니다.
         return postsRepository.findAllDesc().stream()
                 .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
+        //추가 조사 - Java8의 Stream이란?
+        //Stream은 배열, List등의 요소들의 처리를 담당하느 ㄴ클래스로써 기존의 배열처리를 간단하게 해주며,
+        //function style로 처리할 수 있도록 해줍니다. 그리고 병렬처리 Optional등 다양한 처리를 할 수 있도록 지원해줍니다.
+
+        //collection() 메서드는 Stream을 다시 List, Map 등 다양한 우리가 일반적으로 알고 있는 Collection, Object로 변환해 줍니다.
+        //Collectors란 "Stream을 일반적인 List, Set등으로 변경시키는 Stream 메서드"라고 입니다.
+        //toList collector는 모든 Stream elements를 List나 Set instance로 변경하는 메서드입니다.
+        //중요한 것은 특정한 Collection으로 변환이 되는것은 아니라는 것입니다.
     }
-    //람다식 설명
-    
-    //.map(PostsListResponseDto::new)는 .map(posts -> new PostsListResponseDto(posts))와 같습니다
-    //postRepository 결과로 넘어온 Posts의 Stream을 map을 통해 PostsListResponseDto 변환 -> List로 반환하는 메소드입니다.
 
     @Transactional
-    //(readOnly = true)를 주면 트랜잭션 범위는 유지하되, 조회 기능만 남겨두어 속도가 개선되기 때문에
-    //등록, 수정, 삭제 기능이 전혀 없는 서비스 메소드에서 사용하는 것을 추천합니다.
     public void delete(Long id){
         Posts posts = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id ));

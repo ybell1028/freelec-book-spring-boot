@@ -24,7 +24,7 @@ import javax.persistence.*;
 //여기서 Post 클래스는 실제 DB의 테이블과 매칭될 클래스이며 보통 Entity 클래스라고도 합니다.
 //JPA를 사용하시면 DB 데이터에 작업할 경우 실제 쿼리를 날리기보다는, 이 Entity 클래스의 수정을 통해 작업합니다.
 public class Posts extends BaseTimeEntity {
-    @Id // 해당 테이블의 PK(Primary Key) 필드를 다타냅니다
+    @Id // 해당 테이블의 PK(Primary Key) 필드를 나타냅니다
     //@GeneratedValue - PK의 생성규칙을 나타냅니다.
     //@스프링부트 2.0에서는 GenerationType.IDENTITY 옵션을 추가해야만 auto_increment가 됩니다.
     @GeneratedValue(strategy = GenerationType.IDENTITY)

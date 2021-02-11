@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor // final, @NonNull 인 필드값만 파라미터로 받는 생성자를 생성
 @RestController
-public class PostsApiController {
-
+public class PostsApiController { // 스프링에서 Controller는 노드의 Route같은 역할을 해준다.
     private final PostsService postsService;
 
     @PostMapping("/api/v1/posts")

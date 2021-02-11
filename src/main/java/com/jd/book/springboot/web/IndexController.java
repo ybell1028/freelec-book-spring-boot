@@ -1,5 +1,6 @@
 package com.jd.book.springboot.web;
 
+import com.jd.book.springboot.config.auth.dto.SessionUser;
 import com.jd.book.springboot.service.PostsService;
 import com.jd.book.springboot.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Controller
@@ -17,6 +20,7 @@ public class IndexController {
     //이 위치에 머스테치 파일을 두면 스프링 부트에서 자동으로 로딩합니다.
 
     private final PostsService postsService;
+    private final HttpSession httpSession;
 
     @GetMapping("/")
     public String index(Model model){
@@ -27,6 +31,16 @@ public class IndexController {
         //앞의 경로는 src/main/resources/templates로, 뒤의 파일 확장자는 ,mustache가 붙는 것입니다.
         //즉 여기선 "index"를 반환하므로, src/main/resources/templates/index.mustache로 전환되어 View Resolver가 처리하게 됩니다.
         model.addAttribute("posts", postsService.findAllDesc());
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
+        //앞서 작성된 CustomOAuth2UserService에서 로그인 성공시 세션에 SessionUser를 저장하도록 구성했습니다.
+        //즉, 로그인 성공 시 httpSession.getAttribute("user")에서 값을 가져올 수 있습니다.
+        if(user != null) {
+            model.addAttribute("userName", user.getName());
+            System.out.println(user.getName());
+        } else {
+            System.out.println("안댐");
+        }
         return "index";
     }
 
