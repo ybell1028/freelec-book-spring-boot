@@ -1,5 +1,6 @@
 package com.jd.book.springboot.web;
 
+import com.jd.book.springboot.config.auth.LoginUser;
 import com.jd.book.springboot.config.auth.dto.SessionUser;
 import com.jd.book.springboot.service.PostsService;
 import com.jd.book.springboot.web.dto.PostsResponseDto;
@@ -23,7 +24,7 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model, @LoginUser SessionUser user){
         //Model = 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장할 수 있습니다.
         //여기서는 postsService.findAllDesc()로 가져온 결과를 posts로 index.mustache에 전달합니다.
 
@@ -31,15 +32,13 @@ public class IndexController {
         //앞의 경로는 src/main/resources/templates로, 뒤의 파일 확장자는 ,mustache가 붙는 것입니다.
         //즉 여기선 "index"를 반환하므로, src/main/resources/templates/index.mustache로 전환되어 View Resolver가 처리하게 됩니다.
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         //앞서 작성된 CustomOAuth2UserService에서 로그인 성공시 세션에 SessionUser를 저장하도록 구성했습니다.
-        //즉, 로그인 성공 시 httpSession.getAttribute("user")에서 값을 가져올 수 있습니다.
+        //before)즉, 로그인 성공 시 httpSession.getAttribute("user")에서 값을 가져올 수 있습니다.
+        //after)기존에 (User) httpSession.getAttribute("user)로 가져오던 세션 정보 값이 개선 되었습니다.
+        //이제는 어느 컨트롤러든지 @LoginUser만 사용하면 세션 정보를 가져올 수 있게 되었습니다.
         if(user != null) {
-            model.addAttribute("userName", user.getName());
-            System.out.println(user.getName());
-        } else {
-            System.out.println("안댐");
+            model.addAttribute("googleName", user.getName());
         }
         return "index";
     }

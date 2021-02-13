@@ -1,5 +1,6 @@
 package com.jd.book.springboot.web;
 
+import com.jd.book.springboot.config.auth.SecurityConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,20 +9,33 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import com.jd.book.springboot.web.HelloController;
+
+import java.security.Security;
 
 // @RunWith- 테스트를 진행할때 JUnit에 내장된 실행자 외에 다른 실행자를 실행시킵니다.
 // 여기서는 SpringRunner라는 스프링 실행자를 사용합니다.
 // 즉, 스프링 부트 테스트와 JUnit 사이에 연결자 역할을 합니다.
 @RunWith(SpringRunner.class)
 
-// @WebMvcTest - 여러스프링 테스트 어노테이션 중, Web(Spring MVC)에 집중할 수 있는 어노테이션 입니다.
+// @WebMvcTest - 여러 스프링 테스트 어노테이션 중, Web(Spring MVC)에 집중할 수 있는 어노테이션 입니다.
 // 선언할 경우 @Controller, @ControllerAdvice 등을 사용할 수 있습니다.
 // 단, @Service, @Component, @Repository 등은 사용할 수 없습니다.
 // 여기서는 컨트롤러만 사용하기 때문에 선언합니다.
-@WebMvcTest(controllers = HelloController.class)
+@WebMvcTest(controllers = HelloController.class,
+        //@WebMvcTest를 사용하는 HelloController는 @WebSecurityConfigurerAdapter, WebMvcConfigurer를 비홋한
+        //@ControllerAdvice, @Controller를 읽습니다. 즉, @Repository, @Service, @Component는
+        //스캔 대상이 아닙니다.. SecurityConfig는 읽었지만, SecurityConfig를 생성하기 위해 필요한
+        //CustomOAuth2UserSerivce는 읽을 수가 없어 에러가 발생한 것입니다. 이를 해결하기 위해 스캔 대상에서 SecurityConfig를 제거합니다.
+        excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        }
+)
 public class HelloControllerTest {
     @Autowired // 스프링이 관리하는 Bean을 주입 받습니다.
 
@@ -31,6 +45,7 @@ public class HelloControllerTest {
     private MockMvc mvc;
 
     @Test
+    @WithMockUser(roles = "USER")
     public void  hello가_리턴된다() throws Exception{
         String hello = "hello";
 
@@ -47,6 +62,7 @@ public class HelloControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     public void helloDto가_리턴된다() throws Exception{
         String name = "hello";
         int amount = 1000;
