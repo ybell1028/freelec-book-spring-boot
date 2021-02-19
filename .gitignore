@@ -1,4 +1,3 @@
 .idea
 .gradle
-application-oauth.properties
-application-google.properties
+src/main/resources/application-oauth.properties
