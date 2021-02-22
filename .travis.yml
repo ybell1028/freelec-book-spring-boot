@@ -4,9 +4,10 @@ jdk:
 
 #Travis CI를 어느 브랜치가 푸시될 때 수행할지 지정합니다.
 #현재 옵션은 오직 master 브랜치에 push 될 때만 수행합니다.
-branches:
-  only:
-    - main
+#배포가 master 브랜치로 제한 되기 때문에 deploy가 skip되는 문제 발생
+#branches:
+#  only:
+#    - main
 
 #Travis CI 서버의 HOME
 #그레이들을 통해 의존성을 받게 되면 이를 해당 디렉토리에 캐시하여, **같은 의존성은 다음 배포때부터 다시 받지 않도록** 설정합니다.
@@ -33,6 +34,8 @@ before_deploy:
 #local_dir before_deploy에서 생성한 디렉토리를 지정, 해당 위치의 파일들만 S3로 전송합니다.
 deploy:
   - provider : s3
+    on:
+      all_branches: true # 대신 이렇게 바꿔줌
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     bucket: freelec-spring-boot-build
