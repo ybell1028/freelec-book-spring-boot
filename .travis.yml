@@ -2,14 +2,11 @@ language: java
 jdk:
   - openjdk8
 
-#Travis CI를 어느 브램치가 푸시될 때 수행할지 지정합니다.
+#Travis CI를 어느 브랜치가 푸시될 때 수행할지 지정합니다.
 #현재 옵션은 오직 master 브랜치에 push 될 때만 수행합니다.
 branches:
   only:
     - main
-
-before_intall:
-  - chmod +x gradlew
 
 #Travis CI 서버의 HOME
 #그레이들을 통해 의존성을 받게 되면 이를 해당 디렉토리에 캐시하여, **같은 의존성은 다음 배포때부터 다시 받지 않도록** 설정합니다.
@@ -18,9 +15,35 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-#master 브랜치에 푸시되었을 때 수행하는 명령어입니다.
+#main 브랜치에 푸시되었을 때 수행하는 명령어입니다.
 #여기서는 프로젝트 내부에 둔 gradlew을 통해 clean & build를 수행합니다.
 script: "./gradlew clean build"
+
+#deploy 명령어가 실행되기 전에 수행됩니다
+#CodeDeploy는 Jar파일은 인식하지 못하므로 Jar+기타 설정파일들을 모아 압축합니다.
+#현재 위치의 모든 파일을 ~~ 이름으로 압축(zip)합니다. 명령어의 마지막 위치는 본인의 프로젝트 이름이어야 합니다.
+before_deploy:
+  - zip -r freelec-book-spring-boot *
+  - mkdir -p deploy
+  - mv freelec-book-spring-boot.zip deploy/freelec-book-spring-boot.zip
+
+#S3로 파일 업로드 혹은 CodeDeploy로 배포 등 **외부 서비스와 연동될 행위들을 선언합니다.**
+
+#acl - zip 파일 접근을 private으로
+#local_dir before_deploy에서 생성한 디렉토리를 지정, 해당 위치의 파일들만 S3로 전송합니다.
+deploy:
+  - provider : s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: freelec-spring-boot-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
+
+before_install:
+  - chmod +x gradlew
 
 #CI 실행 완료시 메일로 알람
 notifications:
