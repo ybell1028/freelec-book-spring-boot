@@ -33,7 +33,7 @@ before_deploy:
 #acl - zip 파일 접근을 private으로
 #local_dir before_deploy에서 생성한 디렉토리를 지정, 해당 위치의 파일들만 S3로 전송합니다.
 deploy:
-  - provider : s3
+  - provider: s3
     on:
       all_branches: true # 대신 이렇게 바꿔줌
     access_key_id: $AWS_ACCESS_KEY
@@ -43,6 +43,19 @@ deploy:
     skip_cleanup: true
     acl: private
     local_dir: deploy
+    wait-until-deployed: true
+
+  - provider: codedeploy
+    on:
+      all_branches: true
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: freelec-spring-boot-build #S3 버킷
+    key: freelec-book-spring-boot.zip #빌드 파일을 압축해서 전달
+    bundle_type: zip #압축 확장자
+    application: freelec-book-spring-boot #웹 콘솔에서 등록한 CodeDeploy 애플리케이션
+    deployment_group: freelec-book-spring-boot-group #웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
     wait-until-deployed: true
 
 before_install:
