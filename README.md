@@ -4,7 +4,7 @@
 </p>
 
 * 이동욱(jojoldu) 지음
-* [참고 선행 레포지토리](https://github.com/jojoldu/freelec-springboot2-webservice, "https://github.com/jojoldu/freelec-springboot2-webservice")
+* [참고 선행 레포지토리](https://github.com/jojoldu/freelec-springboot2-webservice "https://github.com/jojoldu/freelec-springboot2-webservice")
 
 <br>
 
