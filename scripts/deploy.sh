@@ -16,7 +16,7 @@ echo "> 현재 구동 중인 애플리케이션 pid 확인"
 #스프링 부트 애플리케이션의 프로세스 ID를 찾아 실행 중이면 종료합니다
 #PROJECT_NAME으로 된 다른 프로그램들이 있을 수 있어 jar 프로세스를 찾은 뒤 ID를 찾습니다.
 CURRENT_PID=$(pgrep -fl ${PROJECT_NAME} | grep jar | awk '{print $1}')
-echo "현재 구동 중인 애플리케이션 pid : $CURRENT_PID"
+echo "> 현재 구동 중인 애플리케이션 pid : $CURRENT_PID"
 
 #현재 구동 중인 프로세스가 있는지 없는지를 판단해서 기능을 수행합니다.
 #PID 값을 보고 프로세스가 있으면 해당 프로세스를 종료합니다.
@@ -46,6 +46,6 @@ chmod +x $JAR_NAME
 #이렇게 하지 않으면 nohup.out 파일이 생기지 않고, CodeDeploy 로그에 표준 입출력이 출력됩니다.
 #nohup이 끝나기 전까지 CodeDeploy도 끝나지 않으니 꼭 이렇게 해야만 합니다.
 nohup java -jar \
-    -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties,/home/ec2-user/app/application-real-db.properties,classpa    th:/application-real.properties \
+    -Dspring.config.location=classpath:/application.properties,classpath:/application-real.properties,/home/ec2-user/app/application-oauth.properties,/home/ec2-user/app/application-real-db.properties \
     -Dspring.profiles.active=real \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
