@@ -10,7 +10,7 @@
 
 # ✍️ 이 책을 통해 공부한 것들
 
-### 1장
+## 1장
 * 스프링 부트 설정
 * Graldle 의존성 관리 및 사용법
 * IntelliJ에서 Git 사용법
@@ -18,7 +18,7 @@
 
 <br>
 
-### 2장
+## 2장
 <p>
   <img src="https://user-images.githubusercontent.com/54519245/108797513-b1b3de80-75ce-11eb-99a1-18ffe64d722c.gif" width="400">
 </p>
@@ -35,7 +35,7 @@
 
 <br>
 
-### 3장
+## 3장
 * 자바 표준 ORM인 __JPA__
   * 객체를 관계형 데이터베이스에서 관리
   * ORM은 객체과 관계간의 패러다임 불일치를 해결해주는 기술
@@ -59,3 +59,26 @@
 * JPA의 __영속성 컨텍스트__
   * 더티 체킹(Dirty Checking)
 * JPA Auditing
+
+<br>
+
+## 4장
+* __템플릿 엔진__ 이란?
+  * 지정된 템플릿 양식과 데이터가 합쳐져 HTML 문서를 출력하는 소프트웨어
+  * JSP, Freemarker 등은 서버 사이드 템플릿 엔진
+  * React, Vue.js, Angular 등은 클라이언트 사이드 템플릿 엔진
+* __서버 사이드 템플릿 엔진의 요소는 JS 안에서 사용할 수 없다.__ (서로 작동하는 위치가 각각 서버와 클라이언트로 다르기 때문에)
+* 수많은 언어를 지원하는 가장 심플한 템플릿 엔진 - __머스테치(Mustache)__
+  * 문법이 다른 템플릿 엔진보다 심플함
+  * 로직 코드를 사용할 수 없어 View의 역할과 서버의 역활이 명확하게 분리됨
+  * .js와 .java 확장자를 모두 지원해, 하나의 문법으로 클라이언트/서버 템플릿을 모두 사용가능함
+  * IntelliJ Community 버전에서도 플러그인 지원
+* Controller에서 문자열을 반환할 때 앞의 경로와 뒤의 파일 확장자는 자동으로 지정되며 View Resolver가 처리하게 됨
+ * ex) return "index"; -> return (src/main/resources/templates/)"index"(.mustache);
+* __TestRestTemplate__
+  * SpringBootTest에서 Web Environment 설정을 하였다면 TestRestTemplate은 그에 맞춰서 자동으로 설정되어 Bean이 생성됨 
+  * MockMvc는 Servlet Container를 사용하지 않고 SpringBootTest와 TestRestTemplate는 사용하지 않는다.
+  * 그래서 마치 실제 서버가 동작하는 것처럼 테스트를 수행할 수 있다.
+* Bootstrap을 layout 방식으로 적용
+* JS로 Button 기능 구현
+  * __scope의 중요성__
