@@ -74,7 +74,7 @@
   * .js와 .java 확장자를 모두 지원해, 하나의 문법으로 클라이언트/서버 템플릿을 모두 사용가능함
   * IntelliJ Community 버전에서도 플러그인 지원
 * Controller에서 문자열을 반환할 때 앞의 경로와 뒤의 파일 확장자는 자동으로 지정되며 View Resolver가 처리하게 됨
- * ex) return "index"; -> return (src/main/resources/templates/)"index"(.mustache);
+  * ex) `return "index"; -> return (src/main/resources/templates/)"index"(.mustache);`
 * __TestRestTemplate__
   * SpringBootTest에서 Web Environment 설정을 하였다면 TestRestTemplate은 그에 맞춰서 자동으로 설정되어 Bean이 생성됨 
   * MockMvc는 Servlet Container를 사용하지 않고 SpringBootTest와 TestRestTemplate는 사용하지 않는다.
@@ -82,3 +82,35 @@
 * Bootstrap을 layout 방식으로 적용
 * JS로 Button 기능 구현
   * __scope의 중요성__
+* 규모가 있는 프로젝트의 데이터 조회는 복잡한 조건 등으로 인해 Entity 클래스만으로 처리하기 어려워 __조회용 프레임워크를 추가로 사용함__
+  * 책에서는 __Querydsl__ 을 추천함
+  * 타입 안정성이 보장, 국내에서 많은 회사들이 사용, 레퍼런스가 많다는 장점이 있음
+* 람다식, stream()에 대해서도 나중에 자세히 알아보자
+* CRUD 기능 구현
+  * Controller에 API 라우팅 구현
+  * mustache를 사용한 View 페이지 구현
+  * JS를 사용해 API에 요청 기능
+
+<br>
+
+## 5장
+* __스프링 시큐리티(Spring Security)__
+  * 막강한 인증(Authtentication)과 인가(Authorization, 혹은 권한 부여) 기능을 가진 프레임워크로 사실상 스프링 기반 애플리케이션 보안의 표준
+* 소셜 로그인 서비스 __Oauth2__ 를 사용하는 이유와 편리함
+* __Google 로그인__ 연동
+* 세션 저장을 위해 별도의 Dto를 사용하는 이유
+  > 엔티티 클래스는 언제 다른 엔티티와 관계가 형성될지 모릅니다.  
+  > 예를 들어 @OneToMany, @ManyToOne 등 자식 엔티티를 갖고 있다면 직렬화 대상에 자식들까지 포함되니 __성능 이슈, 부수 효과__ 가 발생할 확률이 높습니다.  
+  > 그래서 __직렬화 기능을 가진 세션 Dto__ 를 추가로 만드는 것이 이후 운영 및 유지보수 때 많은 도움이 됩니다.
+* __Annotation 기반으로 코드 개선하는 법__
+* 세션 저장소로 데이터베이스 사용하기
+  * 실제 현업에서 사용하는 세션 저장소 3가지
+    > 1. 톰캣 세션  
+    > 2. __MySQL과 같은 데이터베이스__ (프로젝트에서 사용)
+    > 3. Redis, Memcached와 같은 메모리 DB
+  * spring-session-jdbc 등록
+  * applicatio.properties에 세션 저장소를 jdbc로 선택하도록 코드 추가
+* __Naver 로그인__ 연동
+  * 스프링 시큐리티를 공식 지원하지 않기 때문에 Common-OAuth2Provider에서 설정해주던 값들도 전부 수동 입력
+  * OAuthAttribute에 네이버인지 판단하는 코드와 생성자 추가
+* 기존 테스트에 시큐리티 적용하기
